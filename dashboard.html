@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduLoca – Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+      color: #004d40;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 50px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      width: 100%;
+      box-sizing: border-box;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #00796b;
+    }
+
+    nav a {
+      margin-left: 25px;
+      text-decoration: none;
+      color: #00796b;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #ffc107;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      margin-top: 80px; /* To account for fixed header */
+      margin-bottom: 20px;
+    }
+    
+    .card {
+      padding: 40px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+      backdrop-filter: blur(5px);
+      text-align: center;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    
+    .card h2 {
+        margin-top: 0;
+        color: #00796b;
+        font-size: 2rem;
+    }
+    
+    .card input, .card select {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    .card button {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        background: #00796b;
+        color: white;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background .3s ease;
+    }
+    
+    .card button:hover {
+        background: #009688;
+    }
+    
+    #dashboard-view h3 {
+        text-align: left;
+        color: #00796b;
+    }
+
+    #logout-btn {
+        background: #dc3545;
+        margin-top: 15px;
+    }
+    #logout-btn:hover {
+        background: #c82333;
+    }
+
+    .session-list {
+        text-align: left;
+        list-style-type: none;
+        padding: 0;
+    }
+    
+    .session-item {
+        background: #fff;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    .session-item .details {
+        flex-grow: 1;
+    }
+    
+    .session-item button {
+        width: auto;
+        padding: 8px 15px;
+        font-size: 0.9rem;
+        background-color: #4CAF50;
+    }
+    
+    .session-item button:hover {
+        background-color: #45a049;
+    }
+    
+    .view {
+        display: none;
+    }
+    .view.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>EduLoca</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="find-tutor.html">Find Tutor</a>
+      <a href="learner-signup.html">Learner Signup</a>
+      <a href="become-tutor.html">Become Tutor</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <!-- Login View -->
+    <div id="login-view" class="view active card">
+      <h2>Dashboard Login</h2>
+      <p>Log in as a tutor or a learner to manage your sessions.</p>
+      <form id="login-form">
+        <select id="user-type">
+          <option value="learner">I am a Learner</option>
+          <option value="tutor">I am a Tutor</option>
+        </select>
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="dashboard-view" class="view card" style="display: none;">
+      <h2 id="welcome-message">Welcome!</h2>
+      <div id="tutor-dashboard">
+          <h3>Your Upcoming Sessions</h3>
+          <ul id="tutor-session-list" class="session-list">
+              <!-- Tutor sessions will be dynamically added here -->
+          </ul>
+      </div>
+      <div id="learner-dashboard">
+          <h3>Your Booked Sessions</h3>
+          <ul id="learner-session-list" class="session-list">
+              <!-- Learner sessions will be dynamically added here -->
+          </ul>
+      </div>
+       <button id="logout-btn">Logout</button>
+    </div>
+  </div>
+
+  <script>
+    // --- FAKE DATA & STATE ---
+    // In a real app, this data would come from a server after login.
+    const fakeSessions = [
+        { learnerEmail: 'student@example.com', tutorName: 'Dr. Anya Sharma', subject: 'Physics', time: '2025-10-27T10:00:00', meetLink: 'https://meet.google.com/abc-defg-hij' },
+        { learnerEmail: 'student@example.com', tutorName: 'Rohan Verma', subject: 'Computer Science', time: '2025-10-28T14:30:00', meetLink: 'https://meet.google.com/klm-nopq-rst' },
+        { learnerEmail: 'another.student@example.com', tutorName: 'Dr. Anya Sharma', subject: 'Physics', time: '2025-10-29T11:00:00', meetLink: 'https://meet.google.com/uvw-xyza-bcd' }
+    ];
+    let currentUser = null;
+
+    // --- DOM ELEMENTS ---
+    const loginView = document.getElementById('login-view');
+    const dashboardView = document.getElementById('dashboard-view');
+    const loginForm = document.getElementById('login-form');
+    const welcomeMessage = document.getElementById('welcome-message');
+    const tutorDashboard = document.getElementById('tutor-dashboard');
+    const learnerDashboard = document.getElementById('learner-dashboard');
+    const tutorSessionList = document.getElementById('tutor-session-list');
+    const learnerSessionList = document.getElementById('learner-session-list');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    // --- EVENT LISTENERS ---
+    loginForm.addEventListener('submit', handleLogin);
+    logoutBtn.addEventListener('click', handleLogout);
+
+    // --- FUNCTIONS ---
+    function handleLogin(e) {
+      e.preventDefault();
+      const userType = document.getElementById('user-type').value;
+      const email = document.getElementById('email').value;
+
+      if (!email) {
+          alert('Please enter your email.');
+          return;
+      }
+
+      currentUser = { type: userType, email: email };
+      sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+      showDashboard();
+    }
+    
+    function handleLogout() {
+        currentUser = null;
+        sessionStorage.removeItem('currentUser');
+        showLogin();
+    }
+
+    function showDashboard() {
+        loginView.classList.remove('active');
+        dashboardView.classList.add('active');
+        dashboardView.style.display = 'block';
+        loginView.style.display = 'none';
+
+        welcomeMessage.textContent = `Welcome, ${currentUser.email}`;
+
+        if (currentUser.type === 'tutor') {
+            learnerDashboard.style.display = 'none';
+            tutorDashboard.style.display = 'block';
+            populateTutorSessions();
+        } else {
+            tutorDashboard.style.display = 'none';
+            learnerDashboard.style.display = 'block';
+            populateLearnerSessions();
+        }
+    }
+    
+    function showLogin() {
+        dashboardView.classList.remove('active');
+        loginView.classList.add('active');
+        loginView.style.display = 'block';
+        dashboardView.style.display = 'none';
+    }
+
+    function populateTutorSessions() {
+        const approvedTutors = JSON.parse(localStorage.getItem('approvedTutors')) || [];
+        const currentTutor = approvedTutors.find(t => t.email.toLowerCase() === currentUser.email.toLowerCase());
+        
+        if (!currentTutor) {
+             tutorSessionList.innerHTML = '<li>No approved tutor profile found for this email.</li>';
+             return;
+        }
+        
+        const userBookedSessions = JSON.parse(localStorage.getItem('bookedSessions')) || [];
+        const allSessions = [...fakeSessions, ...userBookedSessions];
+
+        const mySessions = allSessions.filter(s => s.tutorName === currentTutor.name);
+
+        tutorSessionList.innerHTML = ''; // Clear list
+        if (mySessions.length === 0) {
+            tutorSessionList.innerHTML = '<li>You have no upcoming sessions.</li>';
+            return;
+        }
+
+        mySessions.forEach(session => {
+            const item = document.createElement('li');
+            item.className = 'session-item';
+            const sessionTime = new Date(session.time);
+            item.innerHTML = `
+                <div class="details">
+                    <strong>${session.subject}</strong> with ${session.learnerEmail}<br>
+                    <small>${sessionTime.toLocaleString()}</small>
+                </div>
+                <a href="${session.meetLink}" target="_blank"><button>Join Meet</button></a>
+            `;
+            tutorSessionList.appendChild(item);
+        });
+    }
+
+    function populateLearnerSessions() {
+        const userBookedSessions = JSON.parse(localStorage.getItem('bookedSessions')) || [];
+        const allSessions = [...fakeSessions, ...userBookedSessions];
+        
+        const mySessions = allSessions.filter(s => s.learnerEmail.toLowerCase() === currentUser.email.toLowerCase());
+        
+        learnerSessionList.innerHTML = ''; // Clear list
+        if (mySessions.length === 0) {
+            learnerSessionList.innerHTML = '<li>You have no booked sessions. Go to "Find a Tutor" to book one!</li>';
+            return;
+        }
+
+        mySessions.forEach(session => {
+            const item = document.createElement('li');
+            item.className = 'session-item';
+            const sessionTime = new Date(session.time);
+            item.innerHTML = `
+                <div class="details">
+                    <strong>${session.subject}</strong> with ${session.tutorName}<br>
+                    <small>${sessionTime.toLocaleString()}</small>
+                </div>
+                <a href="${session.meetLink}" target="_blank"><button>Join Meet</button></a>
+            `;
+            learnerSessionList.appendChild(item);
+        });
+    }
+
+    // --- ON PAGE LOAD ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const storedUser = sessionStorage.getItem('currentUser');
+        if (storedUser) {
+            currentUser = JSON.parse(storedUser);
+            showDashboard();
+        } else {
+            showLogin();
+        }
+    });
+
+  </script>
+</body>
+</html>
+

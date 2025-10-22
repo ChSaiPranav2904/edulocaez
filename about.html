@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>EduLoca – About Us</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            color: #004d40;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            box-sizing: border-box;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #00796b;
+        }
+
+        nav a {
+            margin-left: 25px;
+            text-decoration: none;
+            color: #00796b;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ffc107;
+        }
+
+        .about {
+            max-width: 800px;
+            margin: 120px auto 60px auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            animation: fadeIn 1s ease forwards;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            backdrop-filter: blur(4px);
+        }
+
+        .about h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .about p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .bubble {
+            position: absolute;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50%;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(1); opacity: 0; }
+            50% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="background" id="background"></div>
+
+    <header>
+        <h1>EduLoca</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="find-tutor.html">Find Tutor</a>
+            <a href="become-tutor.html">Become Tutor</a>
+            <a href="admin.html">Admin</a>
+            <a href="dashboard.html">Dashboard</a>
+        </nav>
+    </header>
+
+    <section class="about">
+        <h2>About EduLoca</h2>
+        <p>EduLoca is a platform created to empower both learners and instructors. We believe that knowledge should be accessible to everyone, and teaching should be a flexible way to earn and grow.</p>
+        
+        <p>Our community brings together students, professionals, and stay-at-home parents—all eager to share their expertise or learn new skills. Whether it's academic help, hobbies, or career development, EduLoca connects people for focused, 30-minute tutoring sessions based on real-time needs.</p>
+        
+        <p>With simple app-based scheduling, video calls, and review tracking, we ensure convenience and trust. Our future plans include city-wise subject discovery, group learning options, and AI-based tutor matching to personalize experiences even further.</p>
+        
+        <p>Our mission is to democratize education—one street, one session, one learner at a time.</p>
+    </section>
+
+    <footer>
+        &copy; 2025 EduLoca. All rights reserved.
+    </footer>
+
+    <script>
+        const background = document.getElementById('background');
+
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            const size = Math.random() * 60 + 20 + 'px';
+            bubble.style.width = size;
+            bubble.style.height = size;
+            bubble.style.left = Math.random() * window.innerWidth + 'px';
+            bubble.style.animationDuration = Math.random() * 15 + 10 + 's';
+            background.appendChild(bubble);
+
+            setTimeout(() => {
+                bubble.remove();
+            }, 20000);
+        }
+
+        setInterval(createBubble, 500);
+    </script>
+</body>
+</html>

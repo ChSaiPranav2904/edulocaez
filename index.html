@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduLoca – Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+      color: #004d40;
+      text-align: center;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 50px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      width: 100%;
+      box-sizing: border-box;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #00796b;
+    }
+
+    nav a {
+      margin-left: 25px;
+      text-decoration: none;
+      color: #00796b;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #ffc107;
+    }
+
+    .hero {
+      margin-top: 150px;
+      padding: 50px 20px;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .hero h2 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: #004d40;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .buttons button {
+      margin: 10px;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 30px;
+      background: #ffc107;
+      color: #333;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .buttons button:hover {
+      background: #ffca28;
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.5);
+      margin-top: 60px;
+    }
+
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .bubble {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      animation: float 20s linear infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(1); opacity: 0; }
+      50% { opacity: 0.7; }
+      100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="background" id="background"></div>
+
+  <header>
+    <h1>EduLoca</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="find-tutor.html">Find Tutor</a>
+      <a href="learner-signup.html">Learner Signup</a>
+      <a href="become-tutor.html">Become Tutor</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>Democratizing Teaching & Learning</h2>
+    <p>EduLoca connects students with tutors for 30-minute micro-tutoring sessions. Learn anything, anywhere, anytime!</p>
+    <div class="buttons">
+      <button onclick="window.location.href='learner-signup.html'">Sign up as a Learner</button>
+      <button onclick="window.location.href='become-tutor.html'">Sign up as a Tutor</button>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 EduLoca. All rights reserved.
+  </footer>
+
+  <script>
+    const background = document.getElementById('background');
+    function createBubble() {
+      const bubble = document.createElement('div');
+      bubble.classList.add('bubble');
+      const size = Math.random() * 60 + 20 + 'px';
+      bubble.style.width = size;
+      bubble.style.height = size;
+      bubble.style.left = Math.random() * window.innerWidth + 'px';
+      bubble.style.animationDuration = Math.random() * 15 + 10 + 's';
+      background.appendChild(bubble);
+      setTimeout(() => bubble.remove(), 20000);
+    }
+    setInterval(createBubble, 500);
+  </script>
+</body>
+</html>
+

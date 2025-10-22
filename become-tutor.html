@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EduLoca - Become a Tutor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+      color: #004d40;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 50px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      width: 100%;
+      box-sizing: border-box;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #00796b;
+    }
+
+    nav a {
+      margin-left: 25px;
+      text-decoration: none;
+      color: #00796b;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #ffc107;
+    }
+
+    .form-section {
+      max-width: 500px;
+      margin: 120px auto 40px auto;
+      padding: 30px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 20px;
+      animation: fadeIn 1s ease forwards;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    }
+
+    .form-section h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    
+    .form-section p {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+
+    input[type="text"], input[type="email"], input[type="number"], textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    input[type="file"]{
+        padding: 5px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #00796b;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #009688;
+    }
+    
+    #successMessage {
+        text-align: center;
+        padding: 10px;
+        margin-top: 20px;
+        border-radius: 8px;
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        display: none; /* Hidden by default */
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.5);
+      position: relative;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .bubble {
+      position: absolute;
+      background: rgba(255,255,255,0.5);
+      border-radius: 50%;
+      animation: float 20s linear infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(1); opacity: 0; }
+      50% { opacity: 0.7; }
+      100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="background" id="background"></div>
+
+  <header>
+    <h1>EduLoca</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="find-tutor.html">Find Tutor</a>
+      <a href="become-tutor.html">Become Tutor</a>
+      <a href="admin.html">Admin</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+  </header>
+
+  <section class="form-section">
+    <h2>Become a Tutor</h2>
+    <p>Fill in your details to apply. Your application will be reviewed by an Admin.</p>
+
+    <form id="tutorForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" required>
+
+      <label for="subject">Subject Expertise:</label>
+      <input type="text" id="subject" required>
+
+      <label for="qualifications">Qualifications:</label>
+      <input type="text" id="qualifications" required>
+      
+      <label for="fees">Fees/hour (₹):</label>
+      <input type="number" id="fees" required>
+
+      <label for="photo">Upload Photo:</label>
+      <input type="file" id="photo" accept="image/*">
+
+      <button type="submit">Submit Application</button>
+    </form>
+    <div id="successMessage">✅ Application submitted! Waiting for Admin approval.</div>
+  </section>
+
+  <footer>
+    &copy; 2025 EduLoca. All rights reserved.
+  </footer>
+
+  <script>
+    const background = document.getElementById('background');
+    function createBubble() {
+      const bubble = document.createElement('div');
+      bubble.classList.add('bubble');
+      const size = Math.random() * 60 + 20 + 'px';
+      bubble.style.width = size;
+      bubble.style.height = size;
+      bubble.style.left = Math.random() * window.innerWidth + 'px';
+      bubble.style.animationDuration = Math.random() * 15 + 10 + 's';
+      background.appendChild(bubble);
+      setTimeout(() => bubble.remove(), 20000);
+    }
+    setInterval(createBubble, 500);
+
+    document.getElementById("tutorForm").addEventListener("submit", function(e){
+      e.preventDefault();
+
+      const reader = new FileReader();
+      const file = document.getElementById("photo").files[0];
+      const successMessage = document.getElementById("successMessage");
+
+      reader.onloadend = function() {
+        const tutor = {
+          name: document.getElementById("name").value,
+          email: document.getElementById("email").value,
+          subject: document.getElementById("subject").value,
+          qualifications: document.getElementById("qualifications").value,
+          fees: document.getElementById("fees").value,
+          photo: reader.result || "https://placehold.co/100x100/00796b/FFFFFF?text=Tutor"
+        };
+
+        let pendingTutors = JSON.parse(localStorage.getItem("pendingTutors")) || [];
+        pendingTutors.push(tutor);
+        localStorage.setItem("pendingTutors", JSON.stringify(pendingTutors));
+        
+        successMessage.style.display = 'block';
+        document.getElementById("tutorForm").reset();
+
+        setTimeout(() => {
+             successMessage.style.display = 'none';
+        }, 5000);
+      };
+
+      if(file){
+        reader.readAsDataURL(file);
+      } else {
+        reader.onloadend(); // Still proceed if no photo
+      }
+    });
+  </script>
+</body>
+</html>

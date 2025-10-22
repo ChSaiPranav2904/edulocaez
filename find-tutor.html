@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduLoca – Find & Book a Tutor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+      background: #f0f8ff;
+      color: #004d40;
+    }
+    
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23dcedc8' fill-opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M11 0l5 20H6l5-20zm42 31a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM0 72h40v4H0v-4zm0-8h31.4v4H0v-4zm20-16h20v4H20v-4zM0 56h40v4H0v-4zm0-8h20v4H0v-4zm0-8h10v4H0v-4zM0 32h20v4H0v-4zM0 24h10v4H0v-4zm0-8h40v4H0v-4zm0-8h20v4H0v-4zm20-8h20v4H20V0zM49 60l-5-20h6l-5 20z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+        z-index: -1;
+        opacity: 0.5;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 50px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      width: 100%;
+      box-sizing: border-box;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #00796b;
+    }
+
+    nav a {
+      margin-left: 25px;
+      text-decoration: none;
+      color: #00796b;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #ffc107;
+    }
+    
+    .main-container {
+        padding-top: 100px;
+        padding-bottom: 40px;
+        position: relative;
+    }
+    
+    .decor-icon {
+        position: absolute;
+        opacity: 0.1;
+        z-index: -1;
+        color: #00796b;
+    }
+    
+    .book-icon {
+        top: 20px;
+        left: 20px;
+        width: 150px;
+    }
+    
+    .grad-cap-icon {
+        bottom: 20px;
+        right: 20px;
+        width: 150px;
+    }
+
+
+    /* Views */
+    .view {
+        display: none; /* Hidden by default */
+        animation: fadeIn 0.5s ease forwards;
+    }
+    .view.active {
+        display: block;
+    }
+
+    /* Search View */
+    #search-view .search-section {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    #search-view .search-section h2 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #search-view .tutor-cards {
+      max-width: 1200px;
+      margin: 20px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      color: #333;
+      border: 1px solid #e0f7fa;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+    }
+
+    .card img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      object-fit: cover;
+      border: 4px solid #b2ebf2;
+    }
+    
+    .card button {
+        margin-top: 15px;
+        background: #00796b;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background .3s;
+    }
+    .card button:hover {
+        background: #009688;
+    }
+
+    /* Profile & Booking View */
+    .content-container {
+        max-width: 700px;
+        margin: 20px auto;
+        padding: 40px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    }
+    
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+
+    .profile-header img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    
+    .profile-header h2 {
+        margin: 0;
+        color: #00796b;
+        font-size: 2rem;
+    }
+    
+    .time-slots h3 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .slots-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+    }
+    
+    .slot {
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: background .3s, color .3s;
+    }
+    
+    .slot:hover {
+        background: #e0f7fa;
+    }
+    
+    .slot.selected {
+        background: #00796b;
+        color: white;
+        border-color: #00796b;
+    }
+    
+    .action-buttons {
+        text-align: center;
+        margin-top: 30px;
+    }
+    
+    .action-buttons button {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background .3s;
+    }
+
+    .btn-primary { background: #ffc107; color: #333; }
+    .btn-primary:hover { background: #ffca28; }
+    .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
+    
+    .btn-secondary { background: #ccc; }
+    .btn-secondary:hover { background: #bbb; }
+
+
+    /* Session & Review View */
+    .content-container h2 { text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px;}
+    #session-info { text-align: center; font-size: 1.1rem; line-height: 1.7; margin: 20px 0; }
+    #session-info strong { color: #00796b; }
+    
+    .join-button {
+        display: block;
+        width: 80%;
+        max-width: 300px;
+        margin: 20px auto;
+        padding: 15px;
+        text-decoration: none;
+        background: #4caf50;
+        color: white;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 1.2rem;
+        transition: background .3s;
+        border: none;
+        font-family: 'Poppins', sans-serif;
+    }
+    .join-button:hover { background: #43a047; }
+    
+    .star-rating {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+    }
+    .star-rating span {
+        font-size: 2.5rem;
+        cursor: pointer;
+        color: #ccc;
+        transition: color .2s;
+    }
+    
+    #review-form textarea {
+        width: 100%;
+        min-height: 100px;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+    
+    #live-session-view .video-placeholder {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        background: #2c3e50;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-align: center;
+        font-size: 1.2rem;
+        margin: 20px 0;
+    }
+    
+    #live-session-view .video-placeholder p {
+        opacity: 0.7;
+    }
+
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.5);
+      margin-top: 40px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>EduLoca</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="find-tutor.html">Find Tutor</a>
+      <a href="learner-signup.html">Learner Signup</a>
+      <a href="become-tutor.html">Become Tutor</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+  </header>
+
+  <div class="main-container">
+    <svg class="decor-icon book-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5S7.95 8.45 6 10.2V19c.85-.3 1.95-.5 3.5-.5 1.95 0 4.05.4 5.5 1.5s4.05 2.45 6 4.2V6c-.85-.3-1.95-.5-3.5-.5zM19 18.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-3.15.15-4.5.45V10c1.35-.65 2.8-1.1 4.5-1.1 1.2 0 2.4.15 3.5.45v9.15z"></path><path d="M3 19V6c.85-.3 1.95-.5 3.5-.5 1.34 0 3.13.27 4.98.97C11.3 6.6 11.08 6.26 11 6c-1.1-.35-2.3-.5-3.5-.5C5.55 5.5 3.45 6.4 2 8v12c.85-.3 1.95-.5 3.5-.5 1.34 0 3.13.27 4.98.97.05.02.1.03.15.05L10.5 21l-.16-.02C8.58 20.25 6.34 19.5 4.5 19.5c-.5 0-1 .05-1.5.15V19z"></path></svg>
+    <svg class="decor-icon grad-cap-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 10.99l-5 2.73-5-2.73V14.5l5 2.73 5-2.73V10.99z"></path></svg>
+    
+    <!-- View 1: Search for Tutors -->
+    <div id="search-view" class="view active">
+      <div class="search-section">
+        <h2>
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg>
+          Find the Perfect Tutor
+        </h2>
+        <input id="subjectInput" type="text" placeholder="Search by subject..." />
+        <button onclick="searchTutors()">Search</button>
+      </div>
+      <div class="tutor-cards" id="tutor-cards"></div>
+    </div>
+
+    <!-- View 2: Tutor Profile & Booking -->
+    <div id="profile-view" class="view">
+        <div class="content-container" id="profile-details">
+            <!-- Tutor details will be injected here -->
+        </div>
+    </div>
+
+    <!-- View 3: Booking Confirmation -->
+    <div id="session-view" class="view">
+        <div class="content-container">
+            <h2>
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#4caf50"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"></path></svg>
+              Booking Confirmed!
+            </h2>
+            <div id="session-info"></div>
+            <button onclick="startSession()" class="join-button">Join Session Now</button>
+        </div>
+    </div>
+    
+    <!-- View 4: Live Session -->
+    <div id="live-session-view" class="view">
+        <div class="content-container">
+            <h2 id="live-session-title">Session is Live!</h2>
+            <div class="video-placeholder">
+                <p>Your video call would appear here.<br/>(Google Meet/Zoom integration)</p>
+            </div>
+            <div class="action-buttons">
+                <button id="leaveReviewBtn" class="btn-primary">Finish & Leave a Review</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View 5: Leave a Review -->
+    <div id="review-view" class="view">
+        <div class="content-container">
+            <h2>Leave a Review</h2>
+            <form id="review-form">
+                <div class="star-rating" id="star-rating">
+                    <span data-value="1">★</span>
+                    <span data-value="2">★</span>
+                    <span data-value="3">★</span>
+                    <span data-value="4">★</span>
+                    <span data-value="5">★</span>
+                </div>
+                <textarea id="review-text" placeholder="Share your experience..."></textarea>
+                <div class="action-buttons">
+                    <button type="submit" class="btn-primary">Submit Review</button>
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 EduLoca. All rights reserved.
+  </footer>
+
+  <script>
+    let tutors = [];
+    let selectedTutor = null;
+    let selectedSlot = null;
+    let currentRating = 0;
+
+    // --- INITIALIZATION ---
+    window.addEventListener('load', () => {
+      const dummyTutors = [
+          { name: "Dr. Anya Sharma", email: "anya.s@example.com", subject: "Physics, Mathematics", qualifications: "Ph.D. in Physics", fees: "500", photo: "https://placehold.co/120x120/00796b/FFFFFF?text=AS" },
+          { name: "Rohan Verma", email: "rohan.v@example.com", subject: "Computer Science", qualifications: "M.Tech in CS", fees: "450", photo: "https://placehold.co/120x120/ffc107/333333?text=RV" },
+          { name: "Priya Singh", email: "priya.s@example.com", subject: "Biology", qualifications: "M.Sc. in Biotechnology", fees: "400", photo: "https://placehold.co/120x120/4caf50/FFFFFF?text=PS" }
+      ];
+
+      if (!localStorage.getItem('approvedTutors')) {
+          localStorage.setItem('approvedTutors', JSON.stringify(dummyTutors));
+      }
+
+      tutors = JSON.parse(localStorage.getItem('approvedTutors')) || [];
+      displayTutors(tutors);
+      setupEventListeners();
+    });
+    
+    function setupEventListeners() {
+        const stars = document.querySelectorAll('.star-rating span');
+        stars.forEach(star => {
+            star.addEventListener('mouseover', e => highlightStars(e.target.dataset.value));
+            star.addEventListener('mouseout', () => highlightStars(currentRating));
+            star.addEventListener('click', e => {
+                currentRating = e.target.dataset.value;
+                highlightStars(currentRating);
+            });
+        });
+        
+        document.getElementById('review-form').addEventListener('submit', handleReviewSubmit);
+        document.getElementById('leaveReviewBtn').addEventListener('click', () => switchView('review-view'));
+    }
+
+    function switchView(viewId) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+        window.scrollTo(0, 0); 
+    }
+    
+    function displayTutors(tutorList) {
+      const container = document.getElementById('tutor-cards');
+      container.innerHTML = '';
+      if (tutorList.length === 0) {
+        container.innerHTML = '<p>No tutors match your search.</p>';
+        return;
+      }
+      tutorList.forEach(tutor => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.innerHTML = `
+          <img src="${tutor.photo}" alt="Tutor ${tutor.name}">
+          <h3>${tutor.name}</h3>
+          <p><strong>Subject:</strong> ${tutor.subject}</p>
+          <p><strong>Fees:</strong> ₹${tutor.fees}/30 min</p>
+          <button onclick="handleSelectTutor('${tutor.email}')">View Profile & Book</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function searchTutors() {
+      const subject = document.getElementById('subjectInput').value.toLowerCase();
+      const filtered = tutors.filter(tutor => 
+        (tutor.subject || '').toLowerCase().includes(subject)
+      );
+      displayTutors(filtered);
+    }
+    
+    function handleSelectTutor(email) {
+        selectedTutor = tutors.find(t => t.email === email);
+        if (!selectedTutor) return;
+        
+        const profileContainer = document.getElementById('profile-details');
+        profileContainer.innerHTML = `
+            <div class="profile-header">
+                <img src="${selectedTutor.photo}" alt="${selectedTutor.name}">
+                <div>
+                    <h2>${selectedTutor.name}</h2>
+                    <p><strong>Subject:</strong> ${selectedTutor.subject}</p>
+                    <p>${selectedTutor.qualifications}</p>
+                </div>
+            </div>
+            <div class="time-slots">
+                <h3>Available 30-min Slots</h3>
+                <div class="slots-grid">
+                    ${generateTimeSlots()}
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="btn-secondary" onclick="switchView('search-view')">Back to Search</button>
+                <button id="bookSlotBtn" class="btn-primary" onclick="handleBooking()" disabled>Book Selected Slot</button>
+            </div>
+        `;
+        
+        document.querySelectorAll('.slot').forEach(slot => {
+            slot.addEventListener('click', e => selectSlot(e.currentTarget));
+        });
+        
+        switchView('profile-view');
+    }
+
+    function generateTimeSlots() {
+        let slotsHTML = '';
+        const now = new Date();
+        for (let i = 0; i < 9; i++) { 
+            const slotTime = new Date(now.getTime() + (i * 45 * 60000));
+            const timeString = slotTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            slotsHTML += `<div class="slot" data-time="${slotTime.toISOString()}">${timeString}</div>`;
+        }
+        return slotsHTML;
+    }
+    
+    function selectSlot(slotElement) {
+        document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+        slotElement.classList.add('selected');
+        selectedSlot = new Date(slotElement.dataset.time);
+        document.getElementById('bookSlotBtn').disabled = false;
+    }
+    
+    function handleBooking() {
+        if (!selectedTutor || !selectedSlot) {
+            alert("Please select a tutor and a time slot.");
+            return;
+        }
+
+        const learnerEmail = prompt("Please enter your email to confirm the booking:", "");
+        if (!learnerEmail) {
+            alert("Booking cancelled. Email is required to confirm.");
+            return;
+        }
+
+        const newSession = {
+            learnerEmail: learnerEmail.toLowerCase(),
+            tutorName: selectedTutor.name,
+            subject: selectedTutor.subject,
+            time: selectedSlot.toISOString(),
+            meetLink: 'https://meet.google.com/uvw-xyza-bcd' // Dummy link for now
+        };
+
+        let bookedSessions = JSON.parse(localStorage.getItem('bookedSessions')) || [];
+        bookedSessions.push(newSession);
+        localStorage.setItem('bookedSessions', JSON.stringify(bookedSessions));
+
+        const sessionInfo = document.getElementById('session-info');
+        sessionInfo.innerHTML = `
+            <p>Your session with <strong>${selectedTutor.name}</strong> is confirmed!</p>
+            <p><strong>Date:</strong> ${selectedSlot.toLocaleDateString()}</p>
+            <p><strong>Time:</strong> ${selectedSlot.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+        `;
+        
+        switchView('session-view');
+    }
+
+    function startSession() {
+        if (!selectedTutor) return;
+        
+        const liveSessionTitle = document.getElementById('live-session-title');
+        liveSessionTitle.innerHTML = `Session with ${selectedTutor.name} is Live!`;
+        
+        switchView('live-session-view');
+    }
+
+    function highlightStars(rating) {
+        const stars = document.querySelectorAll('.star-rating span');
+        stars.forEach(star => {
+            star.style.color = star.dataset.value <= rating ? '#ffc107' : '#ccc';
+        });
+    }
+
+    function handleReviewSubmit(e) {
+        e.preventDefault();
+        const reviewText = document.getElementById('review-text').value;
+        if (currentRating === 0) {
+            alert('Please select a star rating.');
+            return;
+        }
+        
+        console.log(`Review for ${selectedTutor.name}:`);
+        console.log(`Rating: ${currentRating} stars`);
+        console.log(`Comment: ${reviewText}`);
+        
+        alert('Thank you for your feedback!');
+        
+        currentRating = 0;
+        highlightStars(0);
+        document.getElementById('review-form').reset();
+        switchView('search-view');
+    }
+  </script>
+</body>
+</html>
+

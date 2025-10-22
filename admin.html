@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EduLoca - Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+      color: #004d40;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    
+    #login-container {
+      max-width: 400px;
+      width: 100%;
+      padding: 40px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+      backdrop-filter: blur(4px);
+      text-align: center;
+    }
+    
+    #login-container h1 {
+        margin-top: 0;
+        color: #00796b;
+    }
+    
+    #login-container input {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+    
+    #login-container button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background: #00796b;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background .3s ease;
+    }
+    
+    #login-container button:hover {
+        background: #009688;
+    }
+    
+    #error-message {
+        color: #c0392b;
+        margin-top: 10px;
+        font-weight: 500;
+    }
+    
+    #dashboard {
+        width: 100%;
+        max-width: 900px;
+    }
+    
+    #dashboard h1 {
+        text-align: center;
+    }
+    
+    .header-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .header-controls button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        background: #ffc107;
+        color: #333;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background .3s ease;
+    }
+    
+    .header-controls button:hover {
+        background: #ffca28;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      margin: 15px 0;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: left;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .card-content {
+        flex-grow: 1;
+    }
+    
+    .card-content h3 {
+        margin: 0 0 10px 0;
+        color: #00796b;
+    }
+    
+    .card-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .card-actions button {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100px;
+      transition: opacity .3s ease;
+    }
+    
+    .card-actions button:hover {
+        opacity: 0.8;
+    }
+
+    .accept { background: #28a745; color: white; }
+    .reject { background: #dc3545; color: white; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>EduLoca</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="find-tutor.html">Find Tutor</a>
+      <a href="become-tutor.html">Become Tutor</a>
+      <a href="admin.html">Admin</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div id="login-container">
+      <h1>Admin Login</h1>
+      <form id="login-form">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
+      <p id="error-message"></p>
+    </div>
+
+    <div id="dashboard" style="display: none;">
+      <div class="header-controls">
+        <h1>Admin Dashboard</h1>
+        <button onclick="window.location.href='index.html'">Back to Home</button>
+      </div>
+      <p style="text-align: center;">Review new tutor applications below.</p>
+      <div id="applications"></div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorMessage = document.getElementById('error-message');
+      
+      // Check credentials
+      if (username === 'Eduloca' && password === 'eduloca2025') {
+        document.getElementById('login-container').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        loadApplications();
+      } else {
+        errorMessage.textContent = 'Invalid username or password.';
+      }
+    });
+
+    function loadApplications() {
+      const applications = JSON.parse(localStorage.getItem("pendingTutors")) || [];
+      const container = document.getElementById("applications");
+      container.innerHTML = "";
+
+      if(applications.length === 0){
+        container.innerHTML = "<p style='text-align:center; padding: 20px; background: white; border-radius: 10px;'>No pending applications 🎉</p>";
+        return;
+      }
+
+      applications.forEach((tutor, index) => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+          <img src="${tutor.photo}" alt="Tutor Photo">
+          <div class="card-content">
+            <h3>${tutor.name}</h3>
+            <p><strong>Email:</strong> ${tutor.email}</p>
+            <p><strong>Subject:</strong> ${tutor.subject}</p>
+            <p><strong>Qualifications:</strong> ${tutor.qualifications}</p>
+            <p><strong>Fees/hr:</strong> ₹${tutor.fees}</p>
+          </div>
+          <div class="card-actions">
+             <button class="accept">Accept</button>
+             <button class="reject">Reject</button>
+          </div>
+        `;
+
+        // Accept button functionality
+        card.querySelector(".accept").onclick = () => {
+          let approved = JSON.parse(localStorage.getItem("approvedTutors")) || [];
+          approved.push(tutor);
+          localStorage.setItem("approvedTutors", JSON.stringify(approved));
+
+          applications.splice(index, 1);
+          localStorage.setItem("pendingTutors", JSON.stringify(applications));
+          loadApplications(); // Refresh the list
+        };
+
+        // Reject button functionality
+        card.querySelector(".reject").onclick = () => {
+          applications.splice(index, 1);
+          localStorage.setItem("pendingTutors", JSON.stringify(applications));
+          loadApplications(); // Refresh the list
+        };
+
+        container.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>
