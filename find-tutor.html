@@ -423,12 +423,7 @@
 
     // --- INITIALIZATION ---
     window.addEventListener('load', () => {
-      const dummyTutors = [
-          { name: "Dr. Anya Sharma", email: "anya.s@example.com", subject: "Physics, Mathematics", qualifications: "Ph.D. in Physics", fees: "500", photo: "https://placehold.co/120x120/00796b/FFFFFF?text=AS" },
-          { name: "Rohan Verma", email: "rohan.v@example.com", subject: "Computer Science", qualifications: "M.Tech in CS", fees: "450", photo: "https://placehold.co/120x120/ffc107/333333?text=RV" },
-          { name: "Priya Singh", email: "priya.s@example.com", subject: "Biology", qualifications: "M.Sc. in Biotechnology", fees: "400", photo: "https://placehold.co/120x120/4caf50/FFFFFF?text=PS" }
-      ];
-
+      
       if (!localStorage.getItem('approvedTutors')) {
           localStorage.setItem('approvedTutors', JSON.stringify(dummyTutors));
       }
